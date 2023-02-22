@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+  <title>Welcome To Registration Form</title>
+  <style>
+    body {
+      margin: 0px;
+      background-color: #ffffff;
+      background-image: url(image/background.jpg);
+      color: #121311;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+
+    #main {
+      width: 600px;
+      height: auto;
+      overflow: hidden;
+      padding-bottom: 20px;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 5px;
+      padding-left: 10px;
+      margin-top: 100px;
+      border-top: 3px double #f1f1f1;
+      border-bottom: 3px double #f1f1f1;
+      padding-top: 20px;
+    }
+
+    #main table {
+      font-family: "Comic Sans MS", cursive;
+    }
+
+    /* css code for textbox */
+    #main .tb {
+      height: 28px;
+      width: 230px;
+      border: 1px solid #000000;
+      color: #130a06;
+      font-weight: bold;
+      border-left: 5px solid #f7f7f7;
+      opacity: 0.9;
+    }
+
+    #main .tb:focus {
+      height: 28px;
+      border: 1px solid #000000;
+      outline: none;
+      border-left: 5px solid #f7f7f7;
+    }
+
+    /* css code for button*/
+    #main .btn {
+      width: 150px;
+      height: 32px;
+      outline: none;
+      color: #f7f7f7;
+      font-weight: bold;
+      border: 0px solid #050403;
+      text-shadow: 0px 0.5px 0.5px #fff;
+      border-radius: 2px;
+      font-weight: 600;
+      color: #020201;
+      letter-spacing: 1px;
+      font-size: 14px;
+      background-color: #f1f1f1;
+      -webkit-transition: 1s;
+      -moz-transition: 1s;
+      transition: 1s;
+    }
+
+    #main .btn:hover {
+      background-color: #000000;
+      outline: none;
+      border-radius: 2px;
+      color: #f1f1f1;
+      border: 1px solid #f1f1f1;
+      -webkit-transition: 1s;
+      -moz-transition: 1s;
+      transition: 1s;
+    }
+
+  </style>
+
+</head>
+
+<body>
+  <!-- Main div code -->
+  <div id="main">
+    <div class="h-tag">
+      <h2>Registration_Form</h2>
+    </div>
+    <!-- create account div -->
+    <form onsubmit=Valutidate();return false">
+      <div class="login">
+        <table cellspacing="2" align="center" cellpadding="8" border="0">
+          <tr>
+            <td align="right">Enter Name :</td>
+            <td><input type="text" placeholder="Enter user here" id="name" class="tb" required /></td>
+          </tr>
+          <tr>
+            <td align="right">Enter Email ID :</td>
+            <td><input type="email" placeholder="Enter Email ID here" id="email" class="tb" required /></td>
+          </tr>
+          <tr>
+            <td align="right">Enter Password :</td>
+            <td><input type="password" placeholder="Enter Password here" id="password" class="tb" required /></td>
+          </tr>
+          <tr>
+            <td align="right">DOB :</td>
+            <td><input type="date" placeholder="Enter Password here" id="dob" max="2005-02-13" min="1968-02-13" required
+                class="tb" /></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" required id="checkbox">Accept Teams and condition</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <input type="submit" value="SUBMIT" class="btn" />
+            </td>
+          </tr>
+        </table>
+      </div>
+    </form>
+    <!-- create account box ending here.. -->
+  </div>
+  <!-- Main div ending here... -->
+  <table class="table table-bordered" id="regTable">
+    <thead>
+      <th colspan="5" id="enters" style="text-align: center;">Entries</th>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Password</th>
+        <th>Dob</th>
+        <th>Accepted terms?</th>
+      </tr>
+
+    </thead>
+    <tbody></tbody>
+  </table>
+</body>
+<script>
+  const Valutidate = () => {
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const psw = document.getElementById("password").value;
+    const dob = document.getElementById("dob").value;
+    const check = document.getElementById("checkbox").checked;
+    var Entries;
+    if (localStorage.getItem('user-entries') === null)
+      Entries = [];
+    else
+      Entries = JSON.parse(localStorage.getItem('user-entries'))
+    Entries.unshift({
+      name: name,
+      email: email,
+      psw: psw,
+      dob: dob,
+      check: check
+    })
+    localStorage.setItem('user-entries', JSON.stringify(Entries));
+    visible_data();
+  }
+  const visible_data = () => {
+    var Entries;
+    if (localStorage.getItem('user-entries') === null)
+      Entries = [];
+    else
+      Entries = JSON.parse(localStorage.getItem('user-entries'))
+
+    var html = "";
+
+    Entries.forEach((element, intex) => {
+      html += "<tr>";
+      html += "<td>" + element.name + "</td>";
+      html += "<td>" + element.email + "</td>";
+      html += "<td>" + element.psw + "</td>";
+      html += "<td>" + element.dob + "</td>";
+      html += "<td>" + element.check + "</td>";
+      html += "</tr>";
+    });
+    document.querySelector("#regTable tbody").innerHTML = html;
+
+  }
+  document.onload = visible_data();
+</script>
+
+</html>
