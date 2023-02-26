@@ -1,5 +1,6 @@
 const http = require("http");
 const fs = require("fs");
+const { prototype } = require("module");
 const args = require("minimist")(process.argv);
 const port = args.port;
 
@@ -48,4 +49,4 @@ http.createServer((request, response) => {
         break;
     }
   })
-  .listen(5000);
+  .listen(port);
