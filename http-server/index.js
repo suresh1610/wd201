@@ -32,12 +32,12 @@ http.createServer((request, response) => {
     let url = request.url;
     response.writeHeader(200, { "Content-Type": "text/html" });
     switch (url) {
-      case "project":
+      case "/project.html":
         response.write(projectpage);
         response.end();
         break;
 
-      case "registration":
+      case "/registration.html":
         response.write(registrationpage);
         response.end();
         break;
@@ -48,4 +48,4 @@ http.createServer((request, response) => {
         break;
     }
   })
-  .listen(port);
+  .listen(5000);
