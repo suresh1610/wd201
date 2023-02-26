@@ -7,7 +7,7 @@
         "start": "node index.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
-    "author": "",
+    "author": "Suresh <sureshkanthasamy39@gamil.com>",
     "license": "ISC",
     "dependencies": {
         "minimist": "^1.2.8"

@@ -1,5 +1,7 @@
 const http = require("http");
 const fs = require("fs");
+const args = require("minimist")(process.argv);
+const port = args.port;
 
 let homeContent = "";
 let projectContent = "";
@@ -7,7 +9,7 @@ let registrationContent = "";
 
 fs.readFile("home.html", (err, home) => {
   if (err) {
-    throw err;
+    throw err;S
   }
   homeContent = home;
 });
