@@ -1,6 +1,5 @@
 const http = require("http");
 const fs = require("fs");
-const { prototype } = require("module");
 const args = require("minimist")(process.argv);
 const port = args.port;
 
@@ -29,7 +28,8 @@ fs.readFile("registration.html", (err, registration) => {
   registrationpage = registration;
 });
 
-http.createServer((request, response) => {
+http
+  .createServer((request, response) => {
     let url = request.url;
     response.writeHeader(200, { "Content-Type": "text/html" });
     switch (url) {
@@ -49,4 +49,4 @@ http.createServer((request, response) => {
         break;
     }
   })
-  .listen(5000);
+  .listen(port);
