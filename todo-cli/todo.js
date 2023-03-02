@@ -36,7 +36,7 @@ const todoList = () => {
     }
  
     const toDisplayableList = (list) => {
-        return list.map((todoitem)=> toString(todoitem));
+        return list.map((todoitem)=> toString(todoitem)).join("\n");
       // Format the To-Do list here, and return the output string
       // as per the format given above.
     }
