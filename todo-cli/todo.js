@@ -52,7 +52,7 @@ const todoList = () => {
 
     //convert string
     toString = (all) => {
-        const dueDate = due2day(all.dueDate)
+        const dueDate = due2day(all.dueDate) ?"" :all.dueDate;
         const finish_not = all.completed ? "[x]" : "[ ]";
         return `${finish_not} ${all.title} ${dueDate}`;
     }
