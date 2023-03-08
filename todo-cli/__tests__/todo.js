@@ -1,8 +1,9 @@
+/* eslint-disable no-undef */
 const todoList = require('../todo');
 
 const {all, markAsComplete, add, dueToday, overdue ,dueLater}= todoList();
 
-var declare_date = new Date();
+//var date = new Date();
 const structure_Date = (declare_date) => {
     return declare_date.toISOString().split("T")[0];
 };
