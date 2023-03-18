@@ -19,7 +19,7 @@ describe("Test list of items", function () {
   test("Add overdue item", async () => {
     const todo = await db.Todo.addTask({
       title: "This is a sample item",
-      dueDate: getJSDate(-2),
+      dueDate: getJSDate(-1),
       completed: false,
     });
     const items = await db.Todo.overdue();
@@ -41,7 +41,7 @@ describe("Test list of items", function () {
     const dueLaterItems = await db.Todo.dueLater();
     const todo = await db.Todo.addTask({
       title: "This is a sample item",
-      dueDate: getJSDate(2),
+      dueDate: getJSDate(1),
       completed: false,
     });
     const items = await db.Todo.dueLater();
