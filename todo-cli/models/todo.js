@@ -1,31 +1,83 @@
 "use strict";
+const { Op } = require("sequelize");
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    // eslint-disable-next-line no-unused-vars
-    static associate(models) {
-      // define association here
+    static async addTask(params) {
+      return await Todo.create(params);
+    }
+    static async showList() {
+      console.log("My Todo list \n");
+
+      console.log("Overdue");
+      const overtodo = await this.overdue();
+      const overtodolist = overtodo.map((todo) => todo.displayableString());
+      console.log(overtodolist.join("\n").trim());
+
+      console.log("\n");
+
+      console.log("Due Today");
+      const todaydue = await this.dueToday();
+      const todayduelist = todaydue.map((todo) => todo.displayableString());
+      console.log(todayduelist.join("\n").trim());
+      console.log("\n");
+
+      console.log("Due Later");
+      const laterdue = await this.dueLater();
+      const laterduelist = laterdue.map((todo) => todo.displayableString());
+      console.log(laterduelist.join("\n").trim());
     }
 
-    static addTodo({ title, dueDate }) {
-      return this.create({ title: title, dueDate: dueDate, completed: false });
+    static async overdue() {
+      return Todo.findAll({
+        where: {
+          dueDate: {
+            [Op.lt]: new Date(),
+          },
+        },
+        order: [["id", "ASC"]],
+      });
     }
 
-    static getAllTodos() {
-      return this.findAll({ order: [["id", "ASC"]] });
+    static async dueToday() {
+      return Todo.findAll({
+        where: {
+          dueDate: {
+            [Op.eq]: new Date(),
+          },
+        },
+        order: [["id", "ASC"]],
+      });
     }
 
-    markAsCompleted() {
-      return this.update({ completed: true });
+    static async dueLater() {
+      return Todo.findAll({
+        where: {
+          dueDate: {
+            [Op.gt]: new Date(),
+          },
+        },
+        order: [["id", "ASC"]],
+      });
     }
 
-    deleteitems() {
-      return this.destroy();
+    static async markAsComplete(id) {
+      await Todo.update(
+        { completed: true },
+        {
+          where: {
+            id: id,
+          },
+        }
+      );
+    }
+
+    displayableString() {
+      let checkbox = this.completed ? "[x]" : "[ ]";
+      const date = new Date(this.dueDate);
+      return date.getDate() === new Date().getDate()
+        ? `${this.id}. ${checkbox} ${this.title}`.trim()
+        : `${this.id}. ${checkbox} ${this.title} ${this.dueDate}`.trim();
     }
   }
   Todo.init(
