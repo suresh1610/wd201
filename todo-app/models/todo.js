@@ -23,10 +23,6 @@ module.exports = (sequelize, DataTypes) => {
     markAsCompleted() {
       return this.update({ completed: true });
     }
-
-    deleteitems() {
-      return this.destroy();
-    }
   }
   Todo.init(
     {
