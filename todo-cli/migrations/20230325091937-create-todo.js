@@ -1,9 +1,8 @@
-/* eslint-disable no-unused-vars */
 "use strict";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("todos", {
+    await queryInterface.createTable("Todos", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -30,6 +29,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("todos");
+    await queryInterface.dropTable("Todos");
   },
 };

@@ -1,0 +1,19 @@
+{
+  "name": "wd201",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suresh1610/wd201.git"
+  },
+  "author": "suresh <sureshkanthasamy39@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/suresh1610/wd201/issues"
+  },
+  "homepage": "https://github.com/suresh1610/wd201#readme"
+}
