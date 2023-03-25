@@ -4,21 +4,27 @@ const request = require("supertest");
 const db = require("../models/index");
 const app = require("../app");
 
-let server,agent;
+let server, agent;
 
-describe("Todo test case :", () => {
+describe("Todo Application", function () {
   beforeAll(async () => {
     await db.sequelize.sync({ force: true });
-    server = app.listen(3000, () => { });
+    server = app.listen(3000, () => {});
     agent = request.agent(server);
   });
-  afterAll( async () => {
-    await db.sequelize.close();
-    server.close();
-  })
+
+  afterAll(async () => {
+    try {
+      await db.sequelize.close();
+      await server.close();
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
   test("Creates a todo and responds with json at /todos POST endpoint", async () => {
     const response = await agent.post("/todos").send({
-      title: "first assignment",
+      title: "First Assignment",
       dueDate: new Date().toISOString(),
       completed: false,
     });
@@ -55,7 +61,7 @@ describe("Todo test case :", () => {
       completed: false,
     });
     await agent.post("/todos").send({
-      title: "Fourth Assignment",
+      title: "Forth Assignment",
       dueDate: new Date().toISOString(),
       completed: false,
     });
@@ -63,13 +69,13 @@ describe("Todo test case :", () => {
     const parsedResponse = JSON.parse(response.text);
 
     expect(parsedResponse.length).toBe(4);
-    expect(parsedResponse[3]["title"]).toBe("Fourth Assignment");
+    expect(parsedResponse[3]["title"]).toBe("Forth Assignment");
   });
 
   test("Deletes a todo with the given ID if it exists and sends a boolean response", async () => {
     // FILL IN YOUR CODE HERE
     const response = await agent.post("/todos").send({
-      title: "Fifth Assignmemt",
+      title: "Fifth Assignment",
       dueDate: new Date().toISOString(),
       completed: false,
     });
@@ -84,5 +90,4 @@ describe("Todo test case :", () => {
     const parsedDeleteNonExistentTodoResponses = JSON.parse(deleteNonExistentTodoResponses.text);
     expect(parsedDeleteNonExistentTodoResponses).toBe(false);
   });
-
-})
+});
