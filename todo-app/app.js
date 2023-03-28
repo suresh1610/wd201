@@ -2,10 +2,29 @@ const express = require("express");
 const app = express();
 const { Todo } = require("./models");
 const bodyParser = require("body-parser");
+const path = require("path");
+
 app.use(bodyParser.json());
 
-app.get("/", function (request, response) {
-  response.send("Hello World");
+app.set("View engine","ejs")
+
+app.get("/", async (request,response) => {
+  const allTodos = await Todo.retriveTodos();
+  if(request.accepts("html")){
+    response.render('index.ejs', {
+      allTodos
+    });
+  } else {
+    response.json({
+      allTodos
+    })
+  }
+});
+
+app.use(express.static(path.join(__dirname,"public")))//make directory path for css file;
+
+app.get("/todos", function (request, response) {
+  response.send("Todo List", request.body);
 });
 
 app.get("/todos", async (_request, response) => {

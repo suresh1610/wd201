@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
       return this.create({ title: title, dueDate: dueDate, completed: false });
     }
 
+    static retriveTodos() {//getTodos() is function
+      return this.findAll();//find all todos
+    }
+
     static getAllTodos() {
       return this.findAll({ order: [["id", "ASC"]] });
     }
