@@ -5,10 +5,34 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="./css/styles.css" rel="stylesheet" >
-    <title>Document</title> 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Todo list Items</title> 
 </head>
 <body>
-    <%- include('header.ejs') %>
+    <div class="grid grid-cols-6">
+        <div class="col-start-3 col-span-3">
+            <%- include('header.ejs') %>
+            <form>
+                <div class="flex">
+                    <div class="flex-col py-3 px-10">
+                        <input type="text" placeholder="what's new next?" class="border border-red-300 rounded text-red-900 p-2 text-sm" required />
+                    </div>
+                </div>
+                <div class="flex">
+                    <div class="flex-auto py-3 px-10">
+                        <input type="date" class="border border-red-300 rounded text-red-900 p-2 text-sm"/>
+                    </div>
+                </div>
+                <div class="flex">
+                    <div class="flex-auto py-3 px-6 px-10 mx-10">
+                        <button type="submit" class="border border-red-300 rounded text-red-900 p-2 text-sm bg-red-600 text-white">Add</button>
+                    </div>
+                </div>
+                
+                
+            </form>
+        </div>
+    </div>
     <br>
 
     <%- include('todos.ejs') %>
