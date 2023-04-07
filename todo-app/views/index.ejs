@@ -7,29 +7,29 @@
     <link href="./css/styles.css" rel="stylesheet" >
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        function updatedTodo(id) {
-            fetch(`/todos/${id}/markAsCompleted`,{
+        function updateTodo(id){
+            fetch(`./todos/${id}/markAsCompleted`, {
                 method: "put",
-                header: { "content-Type": "application/json" },
+                headers: { "content-Type": "application/json" },
             })
-            .then((res) => {
-            if (res.ok) {
-              window.location.reload();
-            }
-          })
-          .catch((err) => console.error(err));
+             .then((res) => {
+                if (res.ok){
+                    window.location.reload();
+                }
+             })
+             .catch((err) => console.error(err));
         }
-        function updatedTodo(id) {
-            fetch(`/todos/${id}`,{
+        function deleteTodo(id){
+            fetch(`./todos/${id}`, {
                 method: "delete",
-                header: { "content-Type": "application/json" },
+                headers: { "content-Type": "application/json" },
             })
-            .then((res) => {
-            if (res.ok) {
-              window.location.reload();
-            }
-          })
-          .catch((err) => console.error(err));
+             .then((res) => {
+                if (res.ok){
+                    window.location.reload();
+                }
+             })
+             .catch((err) => console.error(err));
         }
     </script>
     <title>Todo list Items</title> 
@@ -56,9 +56,9 @@
                 </div>
             </form>
             <div>
-                <%- include('todos.ejs', {title:"overdue", date: overdue}) %>
-                <%- include('todos.ejs', {title:"Due Today", date: dueToday}) %>
-                <%- include('todos.ejs', {title:"Due Later", date: dueLater}) %>
+                <%- include('todos.ejs', {title:"overdue", data: overdue}) %>
+                <%- include('todos.ejs', {title:"Due Today", data: dueToday}) %>
+                <%- include('todos.ejs', {title:"Due Later", data: dueLater}) %>
             </div>
         </div>
     </div>

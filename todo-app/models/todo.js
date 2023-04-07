@@ -25,14 +25,14 @@ module.exports = (sequelize, DataTypes) => {
       return this.findAll({ order: [["id", "ASC"]] }); //{ order: [["id", "ASC"]] }
     }
 
-    markAsCompleted() {
+    static markAsCompleted() {
       return this.update({ completed: true });
     }
     static overdue() {
       return this.findAll({
         where: {
           dueDate: {
-            [Op.lt]: new Date().toLocaleDateString("en-CA"),
+            [Op.lt]: new Date().toISOString(),
           },
           completed: false,
         },
