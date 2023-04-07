@@ -6,21 +6,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="./css/styles.css" rel="stylesheet" >
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function updatedTodo(id) {
+            fetch(`/todos/${id}/markAsCompleted`,{
+                method: "put",
+                header: { "content-Type": "application/json" },
+            })
+            .then((res) => {
+            if (res.ok) {
+              window.location.reload();
+            }
+          })
+          .catch((err) => console.error(err));
+        }
+        function updatedTodo(id) {
+            fetch(`/todos/${id}`,{
+                method: "delete",
+                header: { "content-Type": "application/json" },
+            })
+            .then((res) => {
+            if (res.ok) {
+              window.location.reload();
+            }
+          })
+          .catch((err) => console.error(err));
+        }
+    </script>
     <title>Todo list Items</title> 
 </head>
 <body>
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-3">
             <%- include('header.ejs') %>
-            <form>
+            <form action="/todos" method="post">
                 <div class="flex">
                     <div class="flex-col py-3 px-10">
-                        <input type="text" placeholder="what's new next?" class="border border-red-300 rounded text-red-900 p-2 text-sm" required />
+                        <input type="text" name="title" placeholder="what's new next?" class="border border-red-300 rounded text-red-900 p-2 text-sm" required />
                     </div>
                 </div>
                 <div class="flex">
                     <div class="flex-auto py-3 px-10">
-                        <input type="date" class="border border-red-300 rounded text-red-900 p-2 text-sm"/>
+                        <input type="date" name="dueDate" class="border border-red-300 rounded text-red-900 p-2 text-sm"/>
                     </div>
                 </div>
                 <div class="flex">
@@ -28,14 +54,14 @@
                         <button type="submit" class="border border-red-300 rounded text-red-900 p-2 text-sm bg-red-600 text-white">Add</button>
                     </div>
                 </div>
-                
-                
             </form>
+            <div>
+                <%- include('todos.ejs', {title:"overdue", date: overdue}) %>
+                <%- include('todos.ejs', {title:"Due Today", date: dueToday}) %>
+                <%- include('todos.ejs', {title:"Due Later", date: dueLater}) %>
+            </div>
         </div>
     </div>
-    <br>
-
-    <%- include('todos.ejs') %>
     <br>
 
     <%- include('footer.ejs') %>
