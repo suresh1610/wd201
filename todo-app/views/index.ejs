@@ -4,25 +4,43 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<%= csrfToken %>" />
     <link href="./css/styles.css" rel="stylesheet" >
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        function updateTodo(id){
-            fetch(`./todos/${id}/markAsCompleted`, {
-                method: "put",
-                headers: { "content-Type": "application/json" },
+         const token = document
+         .querySelector("meta[name='csrf-token']")
+         .getAttribute("content")
+          const updateTodo = (id) => {
+          const bool = document
+          .querySelector(`#checkbox-${id}`).checked
+          console.log(bool);
+          fetch(`/todos/${id}`, {
+            method: "PUT",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body : JSON.stringify({
+            _csrf : token,
+            completed : bool
             })
-             .then((res) => {
-                if (res.ok){
-                    window.location.reload();
-                }
-             })
-             .catch((err) => console.error(err));
-        }
+          })
+          .then((res) => {
+            if (res.ok) {
+              window.location.reload();
+            }
+          })
+          .catch(err);{
+          console.log(err);
+          }
+        };
         function deleteTodo(id){
             fetch(`./todos/${id}`, {
                 method: "delete",
                 headers: { "content-Type": "application/json" },
+                body: JSON.stringify({
+                    "_csrf": token
+                })
             })
              .then((res) => {
                 if (res.ok){
@@ -39,6 +57,7 @@
         <div class="col-start-3 col-span-3">
             <%- include('header.ejs') %>
             <form action="/todos" method="post">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                 <div class="flex">
                     <div class="flex-col py-3 px-10">
                         <input type="text" name="title" placeholder="what's new next?" class="border border-red-300 rounded text-red-900 p-2 text-sm" required />
@@ -59,6 +78,7 @@
                 <%- include('todos.ejs', {title:"overdue", data: overdue}) %>
                 <%- include('todos.ejs', {title:"Due Today", data: dueToday}) %>
                 <%- include('todos.ejs', {title:"Due Later", data: dueLater}) %>
+                <%- include('todos.ejs', {title: "Completed Items", data: completedItems}) %>
             </div>
         </div>
     </div>
