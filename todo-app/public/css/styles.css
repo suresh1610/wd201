@@ -2,6 +2,6 @@ body {
   background-color: white;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
-.Todo-item:hover .trash-icon {
-  display: block;
+.Todo-Item:hover .trash-icon {
+  display:block;
 }

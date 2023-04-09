@@ -81,7 +81,6 @@
     "convert-source-map": "^2.0.0",
     "cookie-parser": "^1.4.6",
     "cross-spawn": "^7.0.3",
-    "csurf": "^1.11.0",
     "d": "^1.0.1",
     "debug": "^4.3.4",
     "dedent": "^0.7.0",
