@@ -4,6 +4,9 @@ const { Model, Op } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     static associate(models) {
+      Todo.belongsTo(models.User, {
+        foreignKey: 'userId'
+      })
       // define association here
     }
     static addTodo({ title, dueDate }) {
