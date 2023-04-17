@@ -134,8 +134,8 @@ app.post("/users", async (request,response) => {
     return response.redirect("/signup");
   }
   //for pwd
-  if (request.body.password.length < 10 ){
-    request.flash("error", "password can't be empty!");
+  if (request.body.password.length < 6 ){
+    request.flash("error", "password character length should be minimun 6!");
     return response.redirect("/signup");
   }
 
