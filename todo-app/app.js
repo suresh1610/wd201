@@ -14,6 +14,11 @@ const session = require("express-session");
 const LocalStrategy = require('passport-local');
 const bcrypt = require('bcrypt');
 
+//for flash msg
+const flash = require("connect-flash");
+app.set("views", path.join(__dirname, "views"));
+app.use(flash());
+
 const saltRounds = 10;
 
 const { Todo,User } = require("./models");
@@ -32,6 +37,10 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use( (request, response, next) => {
+  response.locals.messages = request.flash();
+  next();
+});
 
 passport.use(new LocalStrategy({
   usernameField: 'email',
@@ -43,11 +52,13 @@ passport.use(new LocalStrategy({
       if(result) {
         return done(null, user);
       } else {
-        return done("Invalid password");
+        return done(null, false, { message:"Invalid password" });
       }
-    }) .catch((error) => {
-      return (error)
-    })
+    }) .catch(() => {
+      return done(null, false, {
+        message: "Account doesn't exist",
+      });
+    });
 }));
 
 passport.serializeUser((user, done) => {
@@ -109,6 +120,25 @@ app.get("/signup", (request,response) => {
 })
 
 app.post("/users", async (request,response) => {
+  //flash msg for firstname, email, pwd
+
+  //for firstname
+  if (request.body.firstName.length == 0 ){
+    request.flash("error", "FirstName can't be empty!");
+    return response.redirect("/signup");
+  }
+
+  //for email
+  if (request.body.email.length == 0 ){
+    request.flash("error", "email can't be empty!");
+    return response.redirect("/signup");
+  }
+  //for pwd
+  if (request.body.password.length < 10 ){
+    request.flash("error", "password can't be empty!");
+    return response.redirect("/signup");
+  }
+
   //hash password created
   const hashedPwd = await bcrypt.hash(request.body.password, saltRounds);
   console.log(hashedPwd)
@@ -135,7 +165,7 @@ app.get("/login", (request, response) => {
   response.render("login", { title: "Login", csrfToken: request.csrfToken()});
 })
 
-app.post("/session", passport.authenticate('local', { failureRedirect: "/login"}), (request, response) => {
+app.post("/session", passport.authenticate('local', { failureRedirect: "/login", failureFlash: true,}), (request, response) => {
   console.log(request.user);
   response.redirect("/todos");
 })
@@ -171,6 +201,20 @@ app.get("/todos/:id", async function (request, response) {
 app.post("/todos",connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
   console.log("creating new todo", request.body);
   console.log(request.user);
+
+  //flash msg for todo title and dueDate
+  //for title
+  if (request.body.title.length == 0 ){
+    request.flash("error", "Title can't be empty!");
+    return response.redirect("/todos");
+  }
+
+  //for duedate
+  if (request.body.dueDate.length == 0 ){
+    request.flash("error", "dueDate can't be empty!");
+    return response.redirect("/todos");
+  }
+
   try {
     await Todo.addTodo({
       title: request.body.title,

@@ -11,9 +11,15 @@ module.exports = {
       },
       title: {
         type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notNull: true,
+          len : [2,20]
+        }
       },
       dueDate: {
         type: Sequelize.DATEONLY,
+        isDate: true,
       },
       completed: {
         type: Sequelize.BOOLEAN,
