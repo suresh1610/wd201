@@ -80,6 +80,7 @@
     "concat-map": "^0.0.1",
     "config-chain": "^1.1.13",
     "connect-ensure-login": "^0.1.1",
+    "connect-flash": "^0.1.1",
     "convert-source-map": "^2.0.0",
     "cookie-parser": "^1.4.6",
     "cross-spawn": "^7.0.3",

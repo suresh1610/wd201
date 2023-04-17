@@ -33,7 +33,7 @@
           console.log(err);
           }
         };
-            function deleteTodo(id) {
+        function deleteTodo(id) {
         fetch(`/todos/${id}`,{
           method: "delete",
           headers: {"Content-Type":"application/json"},
@@ -54,6 +54,7 @@
        <div class= "grid  grid-cols-6">
         <div class="col-start-3 col-span-2">
         <%- include("header.ejs") %>
+        <a href="/signout">signout</a>
         <form action="/todos" method="post">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <div class="flex gap-2 py-4">

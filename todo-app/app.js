@@ -38,12 +38,12 @@ passport.use(new LocalStrategy({
   passwordField: 'password'
 }, (username, password, done) => {
   User.findOne({ where: { email: username }})
-    .then(async (user) => {
+    .then(async(user) => {
       const result = await bcrypt.compare(password, user.password)
       if(result) {
-        return done(null, user)
+        return done(null, user);
       } else {
-        return done("Invalid password")
+        return done("Invalid password");
       }
     }) .catch((error) => {
       return (error)
@@ -78,11 +78,12 @@ app.get("/", async (request, response) => {
 });
 
 app.get("/todos", connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
-  const allTodos = await Todo.getTodo();
-  const overdue = await Todo.overdue();
-  const dueLater = await Todo.dueLater();
-  const dueToday = await Todo.dueToday();
-  const completedItems = await Todo.completedItems();
+  const loggedInUser = request.user.id;
+  const allTodos = await Todo.getTodo(loggedInUser);
+  const overdue = await Todo.overdue(loggedInUser);
+  const dueLater = await Todo.dueLater(loggedInUser);
+  const dueToday = await Todo.dueToday(loggedInUser);
+  const completedItems = await Todo.completedItems(loggedInUser);
   if (request.accepts("html")) {
     response.render("todo", {
       title: "Todo Application",
@@ -94,11 +95,12 @@ app.get("/todos", connectEnsureLogin.ensureLoggedIn(), async (request, response)
       csrfToken: request.csrfToken(),
     });
   } else {
-    response.json(
+    response.json({
       overdue,
       dueLater,
       dueToday,
-      completedItems);
+      completedItems
+    });
   }
 });
 
@@ -130,12 +132,19 @@ app.post("/users", async (request,response) => {
 })
 
 app.get("/login", (request, response) => {
-  response.render("login", { title: "Login", csrfToken: request.csrfToken() });
+  response.render("login", { title: "Login", csrfToken: request.csrfToken()});
 })
 
 app.post("/session", passport.authenticate('local', { failureRedirect: "/login"}), (request, response) => {
   console.log(request.user);
-    response.redirect("/todos");
+  response.redirect("/todos");
+})
+
+app.get("/signout", (request, response, next) => {
+  request.logout((err) => {
+    if (err) { return next(err); }
+    response.redirect("/");
+  })
 })
 
 app.get("/todos", async (request, response) => {
@@ -159,22 +168,24 @@ app.get("/todos/:id", async function (request, response) {
   }
 });
 
-app.post("/todos", async (request, response) => {
+app.post("/todos",connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
   console.log("creating new todo", request.body);
+  console.log(request.user);
   try {
     await Todo.addTodo({
       title: request.body.title,
       dueDate: request.body.dueDate,
       commpleted: false,
+      userId: request.user.id
     });
-    return response.redirect("/");
+    return response.redirect("/todos");
   } catch (error) {
     console.log(error);
     return response.status(422).json(error);
   }
 });
 
-app.put("/todos/:id", async (request, response) => {
+app.put("/todos/:id", connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
   console.log("Mark Todo as completed:", request.params.id);
   const todo = await Todo.findByPk(request.params.id);
   try {
@@ -185,11 +196,12 @@ app.put("/todos/:id", async (request, response) => {
     return response.status(422).json(error);
   }
 });
-app.delete("/todos/:id", async (request, response) => {
+
+app.delete("/todos/:id",connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
   console.log("delete a todo with ID:", request.params.id);
   try {
-    await Todo.remove(request.params.id);
-    return response.json({ success: true });
+    await Todo.remove(request.params.id, request.user.id);
+    return response.json(true);
   } catch (error) {
     return response.status(422).json(error);
   }
